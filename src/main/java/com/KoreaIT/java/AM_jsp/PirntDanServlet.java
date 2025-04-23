@@ -15,33 +15,33 @@ public class PirntDanServlet extends HttpServlet {
 
 		response.setContentType("text/html;charset=UTF-8");
 
-//		response.getWriter().append("===8단===<br>");
-//		response.getWriter().append("8 * 1 = 8<br>");
-//		response.getWriter().append(String.format("%d * %d = %d<br>", 8, 1, 8));
-//		response.getWriter().append("===8단===");
-
-//		자바, HTML 을 섞어서 쓸 수 있다.
-//		int dan = 8;
-//
-//		for (int i = 1; i <= 9; i++) {
-//			response.getWriter().append(String.format("%d * %d = %d<br>", dan, i, dan * i));
-//		}
-		// parameter 보내기 : 주소 뒤에 ?변수이름=값(?dan=8)
-		// 두 개 이상의 parameter 보내기 : 첫번째만 ?, 두번째부터 & (?dan=8&limit=10)
-		//null 값 처리
-		
 		String inputedDan = request.getParameter("dan");
-		
+		String inputedLimit = request.getParameter("limit");
+		String inputedColor = request.getParameter("color");
+
 		if (inputedDan == null) {
 			inputedDan = "1";
 		}
-		
+
+		if (inputedLimit == null) {
+			inputedLimit = "9";
+		}
+
+		if (inputedColor == null) {
+			inputedColor = "black";
+		}
+
 		int dan = Integer.parseInt(inputedDan);
-		
-		for (int i = 1; i <= 9; i++) {
+		int limit = Integer.parseInt(inputedLimit);
+
+		response.getWriter().write(String.format("<div style='color:%s;'>", inputedColor));
+		for (int i = 1; i <= limit; i++) {
 			response.getWriter().append(String.format("%d * %d = %d<br>", dan, i, dan * i));
 		}
-		
+		response.getWriter().print("</div>");
+
+		// write, append, print의 차이?
+
 	}
 
 }
