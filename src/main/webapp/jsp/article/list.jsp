@@ -15,16 +15,22 @@ List<Map<String, Object>> articleRows = (List<Map<String, Object>>) request.getA
 <title>Insert title here</title>
 </head>
 <body>
+
 	<h1>게시글 목록</h1>
 	<ul>
 		<%
 		for (int i = 0; i < articleRows.size(); i++) {
 		%>
-		<li><%=articleRows.get(i).get("id")%>번, <%=articleRows.get(i).get("regDate")%>,<%=articleRows.get(i).get("title")%>,<%=articleRows.get(i).get("body")%></li>
+		<li><a
+			href="detail?id=<%=articleRows.get(i).get("id")%>">
+				<%=articleRows.get(i).get("id")%>번, <%=articleRows.get(i).get("regDate")%>,
+				<%=articleRows.get(i).get("title")%>, <%=articleRows.get(i).get("body")%>
+		</a></li>
 
 		<%
 		}
 		%>
 	</ul>
+
 </body>
 </html>

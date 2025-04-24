@@ -13,8 +13,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/article/list")
-public class ArticleListServlet extends HttpServlet {
+@WebServlet("/article/detail")
+public class ArticleDetailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -39,20 +39,17 @@ public class ArticleListServlet extends HttpServlet {
 
 			DBUtil dbUtil = new DBUtil(request, response);
 			SecSql sql = new SecSql();
-			sql.append("SELECT * FROM article ORDER BY id desc;");
+			
+			int id = Integer.parseInt(request.getParameter("id")); 
+			
+			sql.append("SELECT * FROM article WHERE id =" + id + ";");
 
-			List<Map<String, Object>> articleRows = dbUtil.selectRows(conn, sql);
+			Map<String, Object> articleRow = dbUtil.selectRow(conn, sql);
 
 			// jsp에 데이터를 보내기 위한 작업
-			request.setAttribute("articleRows", articleRows);
+			request.setAttribute("articleRow", articleRow);
 
-//			response.getWriter().append(articleRows.toString());
-
-//			request.getRequestDispatcher("/jsp/article/home.jsp").forward(request, response);
-
-			request.getRequestDispatcher("/jsp/article/list.jsp").forward(request, response);
-
-//			request.getRequestDispatcher("/jsp/article/detail.jsp").forward(request, response);
+			request.getRequestDispatcher("/jsp/article/detail.jsp").forward(request, response);
 
 		} catch (SQLException e) {
 			System.out.println("에러 1 : " + e);
