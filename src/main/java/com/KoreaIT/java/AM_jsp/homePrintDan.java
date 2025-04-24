@@ -12,7 +12,7 @@ public class homePrintDan extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		
 		request.getRequestDispatcher("/jsp/home/printDan.jsp").forward(request, response);
 
 		// 상대경로, 절대경로
