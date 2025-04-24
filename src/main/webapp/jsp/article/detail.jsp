@@ -13,10 +13,11 @@ Map<String, Object> articleRow = (Map<String, Object>) request.getAttribute("art
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>게시글 상세보기</title>
 </head>
 <body>
-
+	<a href="../home/main">메인으로 가기</a>
+	<h2>게시글 상세보기</h2>
 	<%
 	int number;
 	if (request.getParameter("id") == null) {
@@ -37,7 +38,8 @@ Map<String, Object> articleRow = (Map<String, Object>) request.getAttribute("art
 		<li>내용 : <%=articleRow.get("body")%>번
 		</li>
 	</ul>
-	
+
+	<!-- 같은 폴더에 있기 때문에 list만 적어도 무방 -->
 	<a href="list">리스트로 돌아가기</a>
 
 
