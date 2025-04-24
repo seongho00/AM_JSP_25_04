@@ -43,13 +43,17 @@ public class ArticleDeleteServlet extends HttpServlet {
 
 			SecSql sql = new SecSql();
 			
+
+			
 			int id = Integer.parseInt(request.getParameter("id")); 
 			
 			sql.append("DELETE FROM article WHERE id =?;",id);
 
 			DBUtil.delete(conn, sql);
 			
-			request.getRequestDispatcher("/jsp/article/delete.jsp").forward(request, response);
+			
+			response.getWriter().append(String.format("<script>location.replace('list');</script>"));
+// location replace / history back
 
 
 		} catch (SQLException e) {

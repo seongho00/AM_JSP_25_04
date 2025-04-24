@@ -8,6 +8,7 @@
 
 <%
 Map<String, Object> articleRow = (Map<String, Object>) request.getAttribute("articleRow");
+
 %>
 <!DOCTYPE html>
 <html>
@@ -29,7 +30,7 @@ Map<String, Object> articleRow = (Map<String, Object>) request.getAttribute("art
 	%>
 
 	<ul>
-		<li>번호 : <%=articleRow.get("id")%>번
+		<li>번호 : <%=articleRow.get("id")%>번 
 		</li>
 		<li>등록 날짜 : <%=articleRow.get("regDate")%>번
 		</li>
@@ -42,7 +43,10 @@ Map<String, Object> articleRow = (Map<String, Object>) request.getAttribute("art
 	<!-- 같은 폴더에 있기 때문에 list만 적어도 무방 -->
 	<a href="list">리스트로 돌아가기</a>
 	
-	<a href="delete?id=<%=articleRow.get("id")%>">삭제하기</button>
+	<a onClick="if(confirm('정말로 삭제하시겠습니까?') == false){return false;}" href="delete?id=<%=articleRow.get("id")%>">삭제하기</a>
+	
+
+	
 
 </body>
 </html>
