@@ -41,7 +41,7 @@ public class ArticleListServlet extends HttpServlet {
 
 			DBUtil dbUtil = new DBUtil(request, response);
 			SecSql sql = new SecSql();
-			sql.append("SELECT * FROM article;");
+			sql.append("SELECT * FROM article ORDER BY id desc;");
 
 			List<Map<String, Object>> articleRows = dbUtil.selectRows(conn, sql);
 			

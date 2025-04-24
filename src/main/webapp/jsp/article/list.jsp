@@ -17,9 +17,14 @@ List<Map<String, Object>> articleRows = (List<Map<String, Object>>) request.getA
 <body>
 	<h1>게시글 목록</h1>
 	<ul>
-		<li><%=articleRows.get(0).get("id") %> 번</li>
-		<li><%=articleRows.get(1).get("id") %> 번</li>
-		<li><%=articleRows.get(2).get("id") %> 번</li>
+		<%
+		for (int i = 0; i < articleRows.size(); i++) {
+		%>
+		<li><%=articleRows.get(i).get("id")%>번, <%=articleRows.get(i).get("regDate")%>,<%=articleRows.get(i).get("title")%>,<%=articleRows.get(i).get("body")%></li>
+
+		<%
+		}
+		%>
 	</ul>
 </body>
 </html>
