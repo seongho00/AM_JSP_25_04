@@ -41,7 +41,8 @@ Map<String, Object> articleRow = (Map<String, Object>) request.getAttribute("art
 
 	<!-- 같은 폴더에 있기 때문에 list만 적어도 무방 -->
 	<a href="list">리스트로 돌아가기</a>
-
+	
+	<a href="delete?id=<%=articleRow.get("id")%>">삭제하기</button>
 
 </body>
 </html>
