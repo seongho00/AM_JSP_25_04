@@ -9,12 +9,14 @@ import java.util.Map;
 
 import com.KoreaIT.java.AM_jsp.util.DBUtil;
 import com.KoreaIT.java.AM_jsp.util.SecSql;
+import com.mysql.cj.Session;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/home/doLogin")
 public class HomeDoLoginServlet extends HttpServlet {
@@ -38,15 +40,21 @@ public class HomeDoLoginServlet extends HttpServlet {
 		try {
 			conn = DriverManager.getConnection(url, "root", "");
 			response.getWriter().append("연결 성공!");
+			HttpSession session = request.getSession();
 
 			String loginId = request.getParameter("loginId");
 			String loginPw = request.getParameter("loginPw");
+			
+
 			
 			if (loginId.isEmpty()) {
 				response.getWriter().append(String.format("<script>alert('아이디 입력 필요.');</script>"));
 				response.getWriter().append(String.format("<script>history.back();</script>"));
 				return;
 			}
+			
+			
+			
 
 			SecSql sql = new SecSql();
 			sql.append("SELECT *");
@@ -67,8 +75,9 @@ public class HomeDoLoginServlet extends HttpServlet {
 				return;
 			}
 			
-			boolean isLogined = true;
-			request.setAttribute("isLogined", isLogined);
+	
+
+			session.setAttribute("isLogined", true);
 			response.getWriter().append(String.format("<script>alert('로그인 성공!');</script>"));
 			response.getWriter().append(String.format("<script>location.replace('main');</script>"));
 

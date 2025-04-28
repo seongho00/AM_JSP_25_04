@@ -22,6 +22,9 @@
 		<div>
 			<label>비밀번호 확인 : <input type="password" name="checkPw" /></label>
 		</div>
+		<div>
+			<label>이름 : <input type="text" name="name" /></label>
+		</div>
 		<input type="submit" value="로그인" />
 	</form>
 

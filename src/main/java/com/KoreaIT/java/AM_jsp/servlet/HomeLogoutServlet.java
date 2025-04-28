@@ -15,18 +15,28 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/home/logout")
 public class HomeLogoutServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 		response.setContentType("text/html;charset=UTF-8");
+
+		HttpSession session = request.getSession();
+
+		if ((boolean) session.getAttribute("isLogined") == false || session.getAttribute("isLogined") == null) {
+			response.getWriter().append(String.format("<script>alert('이미 로그아웃 되어있음');</script>"));
+			response.getWriter().append(String.format("<script>history.back();</script>"));
+			return;
+		}
 		
-		System.out.println(request.getAttribute("isLogined"));
+		
+		session.setAttribute("isLogined", false);
 		response.getWriter().append(String.format("<script>alert('로그아웃 됨');</script>"));
-		
+		response.getWriter().append(String.format("<script>location.replace('main');</script>"));
 
 	}
 
