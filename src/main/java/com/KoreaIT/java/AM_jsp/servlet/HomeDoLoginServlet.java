@@ -16,8 +16,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/article/doModify")
-public class ArticleDoModifyServlet extends HttpServlet {
+@WebServlet("/home/doLogin")
+public class HomeDoLoginServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -39,21 +39,38 @@ public class ArticleDoModifyServlet extends HttpServlet {
 			conn = DriverManager.getConnection(url, "root", "");
 			response.getWriter().append("연결 성공!");
 
+			String loginId = request.getParameter("loginId");
+			String loginPw = request.getParameter("loginPw");
+			
+			if (loginId.isEmpty()) {
+				response.getWriter().append(String.format("<script>alert('아이디 입력 필요.');</script>"));
+				response.getWriter().append(String.format("<script>history.back();</script>"));
+				return;
+			}
+
 			SecSql sql = new SecSql();
+			sql.append("SELECT *");
+			sql.append("FROM member");
+			sql.append("WHERE regId = ?;", loginId);
 
-			String title = request.getParameter("title");
-			int id = Integer.parseInt(request.getParameter("id"));
-			String body = request.getParameter("body");
+			Map<String, Object> member = DBUtil.selectRow(conn, sql);
 
-			sql.append("UPDATE article ");
-			sql.append("SET regDate = NOW(),");
-			sql.append("title = ?,", title);
-			sql.append("`body` = ?", body);
-			sql.append("WHERE id = ?;", id);
+			if (member.isEmpty()) {
+				response.getWriter().append(String.format("<script>alert('회원가입된 아이디 없음.');</script>"));
+				response.getWriter().append(String.format("<script>history.back();</script>"));
+				return;
+			}
 
-			DBUtil.update(conn, sql);
-
-			response.getWriter().append(String.format("<script>location.replace('detail?id=%d');</script>", id));
+			if (!member.get("regPw").equals(loginPw)) {
+				response.getWriter().append(String.format("<script>alert('비밀번호 틀림');</script>"));
+				response.getWriter().append(String.format("<script>history.back();</script>"));
+				return;
+			}
+			
+			boolean isLogined = true;
+			request.setAttribute("isLogined", isLogined);
+			response.getWriter().append(String.format("<script>alert('로그인 성공!');</script>"));
+			response.getWriter().append(String.format("<script>location.replace('main');</script>"));
 
 		} catch (SQLException e) {
 			System.out.println("에러 1 : " + e);

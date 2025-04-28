@@ -9,14 +9,14 @@ Map<String, Object> article = (Map<String, Object>) request.getAttribute("articl
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>게시글 수정하기</title>
 </head>
 <body>
+	<a href="../list">리스트로 돌아가기</a>
 	<h2><%=article.get("id")%>번 글 수정
 	</h2>
 	<form action="../doModify" method="POST">
-		<div>아이디</div>
-		<input type="text" name="id" value="<%=article.get("id")%>" readonly/>
+		<input type="hidden" name="id" value="<%=article.get("id")%>" />
 		<div>제목</div>
 		<input type="text" name="title" value="<%=article.get("title")%>" />
 		<div>내용</div>

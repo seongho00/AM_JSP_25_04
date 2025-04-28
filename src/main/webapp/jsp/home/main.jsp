@@ -10,8 +10,12 @@
 <body>
 	<h1>메인 페이지</h1>
 	<ul>
-	<!-- list와 같은 폴더에 있지 않기 때문에 .. : 뒤로 한 번 나가기-->
+
 		<li><a href="../article/list">리스트로 이동</a></li>
+		<li><a href="registerPage">회원가입</a></li>
+		<li><a href="loginPage">로그인</a></li>
+		<li><a href="logout">로그아웃</a></li>
+		
 	</ul>
 
 </body>

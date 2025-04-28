@@ -50,6 +50,12 @@ public class ArticleDetailServlet extends HttpServlet {
 			Map<String, Object> articleRow = DBUtil.selectRow(conn, sql);
 
 			request.setAttribute("articleRow", articleRow);
+			
+			// 없는 게시글일 때 
+			if (articleRow == null) {
+				response.getWriter().append(String.format("<script>location.replace('list');</script>"));
+				response.getWriter().append(String.format("<script>alert('Hello');</script>"));
+			}
 
 			request.getRequestDispatcher("/jsp/article/detail.jsp").forward(request, response);
 

@@ -72,6 +72,7 @@ public class ArticleListServlet extends HttpServlet {
 			request.setAttribute("page", page);
 			request.setAttribute("totalCnt", totalCnt);
 
+
 			request.getRequestDispatcher("/jsp/article/list.jsp").forward(request, response);
 
 		} catch (SQLException e) {

@@ -31,11 +31,11 @@ Map<String, Object> articleRow = (Map<String, Object>) request.getAttribute("art
 	<ul>
 		<li>번호 : <%=articleRow.get("id")%>번
 		</li>
-		<li>등록 날짜 : <%=articleRow.get("regDate")%>번
+		<li>등록 날짜 : <%=articleRow.get("regDate")%>
 		</li>
-		<li>제목 : <%=articleRow.get("title")%>번
+		<li>제목 : <%=articleRow.get("title")%>
 		</li>
-		<li>내용 : <%=articleRow.get("body")%>번
+		<li>내용 : <%=articleRow.get("body")%>
 		</li>
 	</ul>
 
@@ -45,7 +45,6 @@ Map<String, Object> articleRow = (Map<String, Object>) request.getAttribute("art
 
 	<a onClick="if(confirm('정말로 삭제하시겠습니까?') == false){return false;}"
 		href="delete?id=<%=articleRow.get("id")%>">삭제하기</a>
-		
 	<div>
 		<a href="list">리스트로 돌아가기</a>
 	</div>
