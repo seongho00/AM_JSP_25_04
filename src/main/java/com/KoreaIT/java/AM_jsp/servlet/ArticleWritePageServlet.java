@@ -16,48 +16,19 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/article/write/page")
+@WebServlet("/article/writePage")
 public class ArticleWritePageServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		response.setContentType("text/html;charset=UTF-8");
 
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+		request.getRequestDispatcher("/jsp/article/doWrite.jsp").forward(request, response);
 
-		String url = "jdbc:mysql://127.0.0.1:3306/AM_JSP_25_04?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul";
-		String user = "";
-		String password = "";
+	}
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		Connection conn = null;
-
-		try {
-			conn = DriverManager.getConnection(url, "root", "");
-			response.getWriter().append("연결 성공!");
-
-
-			
-			request.getRequestDispatcher("/jsp/article/doWrite.jsp").forward(request, response);
-
-
-			
-
-		} catch (SQLException e) {
-			System.out.println("에러 1 : " + e);
-		} finally {
-			try {
-				if (conn != null && !conn.isClosed()) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-
+		doGet(request, response);
 	}
 
 }

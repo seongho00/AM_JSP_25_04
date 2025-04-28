@@ -26,7 +26,7 @@ int totalCnt = (int) request.getAttribute("totalCnt");
 		총 게시글 개수 :
 		<%=totalCnt%>
 	</div>
-	<a href="#" onClick="location.replace('write/page');">글쓰기</a>
+	<a href="writePage" >글쓰기</a>
 
 	<ul>
 		<%

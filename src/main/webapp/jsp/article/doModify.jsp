@@ -14,7 +14,7 @@ Map<String, Object> article = (Map<String, Object>) request.getAttribute("articl
 <body>
 	<h2><%=article.get("id")%>번 글 수정
 	</h2>
-	<form action="http://localhost:8080/AM_JSP_25_04/article/doModify">
+	<form action="../doModify" method="POST">
 		<div>아이디</div>
 		<input type="text" name="id" value="<%=article.get("id")%>" readonly/>
 		<div>제목</div>
