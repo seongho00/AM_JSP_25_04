@@ -22,7 +22,7 @@ session.setAttribute("isLogined", true);
 			<label>비밀번호 : <input type="password" name="loginPw" /></label>
 		</div>
 		
-		<input type="submit" value="회원가입" />
+		<input type="submit" value="로그인" />
 	</form>
 
 </body>

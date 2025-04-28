@@ -11,9 +11,24 @@
 	<a href="main">메인으로 가기</a>
 	<h1>회원가입 페이지</h1>
 
-	<form action="doRegister" method="get">
+	<script type="text/javascript">
+		function RegisterForm__submit(form) {
+			console.log('test');
+			if (form.regId.value.length == 0) {
+				alert('아이디 필요');
+				form.regId.focus();
+				return;
+			}
+		
+			form.submit();
+		}
+	</script>
+
+	<form onsubmit="RegisterForm__submit(this); return false;"
+		action="doRegister" method="POST">
 		<div>
-			<label>아이디 : <input type="text" name="regId" /></label>
+			<label>아이디 : <input autocomplete="off" type="text"
+				name="regId" /></label>
 		</div>
 
 		<div>
@@ -25,7 +40,7 @@
 		<div>
 			<label>이름 : <input type="text" name="name" /></label>
 		</div>
-		<input type="submit" value="로그인" />
+		<input type="submit" value="회원가입" />
 	</form>
 
 </body>

@@ -25,6 +25,11 @@ public class HomeLoginPageServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		
 		HttpSession session = request.getSession();
+		
+		if (session.getAttribute("isLogined") == null) {
+			session.setAttribute("isLogined", false);
+		}
+		
 		if ((boolean) session.getAttribute("isLogined")) {
 			response.getWriter().append(String.format("<script>alert('이미 로그인 되어있음');</script>"));
 			response.getWriter().append(String.format("<script>history.back();</script>"));

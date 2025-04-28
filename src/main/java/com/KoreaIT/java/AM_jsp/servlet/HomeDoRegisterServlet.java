@@ -42,6 +42,7 @@ public class HomeDoRegisterServlet extends HttpServlet {
 			String regId = request.getParameter("regId");
 			String regPw = request.getParameter("regPw");
 			String checkPw = request.getParameter("checkPw");
+			String name = request.getParameter("name");
 
 			if (regId.isEmpty()) {
 				response.getWriter().append(String.format("<script>alert('아이디 입력 필요');</script>"));
@@ -60,7 +61,7 @@ public class HomeDoRegisterServlet extends HttpServlet {
 				response.getWriter().append(String.format("<script>history.back();</script>"));
 				return;
 			}
-//
+
 			if (!regPw.equals(checkPw)) {
 				response.getWriter().append(String.format("<script>alert('비번 확인 안 맞음');</script>"));
 				response.getWriter().append(String.format("<script>history.back();</script>"));
@@ -73,11 +74,6 @@ public class HomeDoRegisterServlet extends HttpServlet {
 			sql.append("WHERE regId = ?;", regId);
 
 			Map<String, Object> member = DBUtil.selectRow(conn, sql);
-			System.out.println(regId);
-			System.out.println(regPw);
-			System.out.println(checkPw);
-			System.out.println(member);
-
 
 			if (!member.isEmpty()) {
 				response.getWriter().append(String.format("<script>alert('중복 아이디');</script>"));
@@ -90,7 +86,8 @@ public class HomeDoRegisterServlet extends HttpServlet {
 			sql.append("INSERT INTO `member`");
 			sql.append("SET regDate = NOW(),");
 			sql.append("regId = ?,", regId);
-			sql.append("regPw = ?;", regPw);
+			sql.append("regPw = ?,", regPw);
+			sql.append("`name` = ?;", name);
 
 			DBUtil.insert(conn, sql);
 
