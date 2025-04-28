@@ -16,9 +16,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/article/list")
-public class ArticleListServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+@WebServlet("/article/write/page")
+public class ArticleWritePageServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -40,39 +39,12 @@ public class ArticleListServlet extends HttpServlet {
 			conn = DriverManager.getConnection(url, "root", "");
 			response.getWriter().append("연결 성공!");
 
-			int page = 1;
-			String inputedPage = request.getParameter("page");
 
-			if (inputedPage != null) {
-				page = Integer.parseInt(inputedPage);
-			}
-			int viewArticleCount = 10;
-
-			int limitFrom = (page - 1) * viewArticleCount;
 			
-			SecSql sql = new SecSql();
+			request.getRequestDispatcher("/jsp/article/doWrite.jsp").forward(request, response);
 
-			sql.append("SELECT COUNT(*)");
-			sql.append("FROM article;");
 
-			int totalCnt = DBUtil.selectRowIntValue(conn, sql);
-
-			int totalPage = (int) Math.ceil(totalCnt / (double) viewArticleCount);
-
-			sql = new SecSql();
-			sql.append("SELECT * ");
-			sql.append("FROM article");
-			sql.append("ORDER BY id desc");
-			sql.append("LIMIT ?, ? ;", limitFrom, viewArticleCount);
-
-			List<Map<String, Object>> articleRows = DBUtil.selectRows(conn, sql);
-
-			request.setAttribute("articleRows", articleRows);
-			request.setAttribute("totalPage", totalPage);
-			request.setAttribute("page", page);
-			request.setAttribute("totalCnt", totalCnt);
-
-			request.getRequestDispatcher("/jsp/article/list.jsp").forward(request, response);
+			
 
 		} catch (SQLException e) {
 			System.out.println("에러 1 : " + e);

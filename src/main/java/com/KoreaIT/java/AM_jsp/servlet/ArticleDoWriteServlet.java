@@ -16,9 +16,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/article/list")
-public class ArticleListServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+@WebServlet("/article/doWrite")
+public class ArticleDoWriteServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -40,39 +39,19 @@ public class ArticleListServlet extends HttpServlet {
 			conn = DriverManager.getConnection(url, "root", "");
 			response.getWriter().append("연결 성공!");
 
-			int page = 1;
-			String inputedPage = request.getParameter("page");
-
-			if (inputedPage != null) {
-				page = Integer.parseInt(inputedPage);
-			}
-			int viewArticleCount = 10;
-
-			int limitFrom = (page - 1) * viewArticleCount;
-			
 			SecSql sql = new SecSql();
 
-			sql.append("SELECT COUNT(*)");
-			sql.append("FROM article;");
+			String title = request.getParameter("title");
+			String body = request.getParameter("body");
 
-			int totalCnt = DBUtil.selectRowIntValue(conn, sql);
+			sql.append("INSERT INTO article ");
+			sql.append("SET regDate = NOW(),");
+			sql.append("title = ?,", title);
+			sql.append("`body` = ?;", body);
 
-			int totalPage = (int) Math.ceil(totalCnt / (double) viewArticleCount);
+			DBUtil.insert(conn, sql);
 
-			sql = new SecSql();
-			sql.append("SELECT * ");
-			sql.append("FROM article");
-			sql.append("ORDER BY id desc");
-			sql.append("LIMIT ?, ? ;", limitFrom, viewArticleCount);
-
-			List<Map<String, Object>> articleRows = DBUtil.selectRows(conn, sql);
-
-			request.setAttribute("articleRows", articleRows);
-			request.setAttribute("totalPage", totalPage);
-			request.setAttribute("page", page);
-			request.setAttribute("totalCnt", totalCnt);
-
-			request.getRequestDispatcher("/jsp/article/list.jsp").forward(request, response);
+			response.getWriter().append(String.format("<script>location.replace('list');</script>"));
 
 		} catch (SQLException e) {
 			System.out.println("에러 1 : " + e);
