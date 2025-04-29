@@ -40,6 +40,7 @@ public class MemberDoLoginServlet extends HttpServlet {
 		try {
 			conn = DriverManager.getConnection(url, "root", "");
 			response.getWriter().append("연결 성공!");
+			
 			HttpSession session = request.getSession();
 
 			String loginId = request.getParameter("loginId");
@@ -77,7 +78,6 @@ public class MemberDoLoginServlet extends HttpServlet {
 			
 	
 			session.setAttribute("loginedMember", member);
-			session.setAttribute("isLogined", true);
 			response.getWriter().append(String.format("<script>alert('로그인 성공!');</script>"));
 			response.getWriter().append(String.format("<script>location.replace('../home/main');</script>"));
 

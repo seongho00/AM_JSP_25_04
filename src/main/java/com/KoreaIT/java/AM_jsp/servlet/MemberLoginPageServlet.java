@@ -26,13 +26,8 @@ public class MemberLoginPageServlet extends HttpServlet {
 		
 		HttpSession session = request.getSession();
 		
-		System.out.println(session.getAttribute("isLogined"));
-		
-		if (session.getAttribute("isLogined") == null) {
-			session.setAttribute("isLogined", false);
-		}
-		
-		if ((boolean) session.getAttribute("isLogined")) {
+
+		if (session.getAttribute("loginedMember") != null) {
 			response.getWriter().append(String.format("<script>alert('이미 로그인 되어있음');</script>"));
 			response.getWriter().append(String.format("<script>history.back();</script>"));
 			return;

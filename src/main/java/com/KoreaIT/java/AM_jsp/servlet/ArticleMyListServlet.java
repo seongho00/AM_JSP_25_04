@@ -60,30 +60,23 @@ public class ArticleMyListServlet extends HttpServlet {
 
 			int totalPage = (int) Math.ceil(totalCnt / (double) viewArticleCount);
 
-//			sql = new SecSql();
-//			sql.append("SELECT * ");
-//			sql.append("FROM article");
-//			sql.append("ORDER BY id desc");
-//			sql.append("LIMIT ?, ? ;", limitFrom, viewArticleCount);
-//
-//			List<Map<String, Object>> articleRows = DBUtil.selectRows(conn, sql);
-			
+			Map<String, Object> loginedMember = (Map<String, Object>) session.getAttribute("loginedMember");
+
 			sql = new SecSql();
 			sql.append("SELECT A.*, M.name AS `name`");
 			sql.append("FROM article AS A");
 			sql.append("INNER JOIN `member` AS M");
 			sql.append("ON A.memberId = M.id");
+			sql.append("WHERE A.memberId = ?", loginedMember.get("id"));
 			sql.append("ORDER BY A.id desc");
-			
+			sql.append("LIMIT ?, ? ;", limitFrom, viewArticleCount);
+
 			List<Map<String, Object>> articleRows = DBUtil.selectRows(conn, sql);
-			
-			
+
 			request.setAttribute("articleRows", articleRows);
 			request.setAttribute("totalPage", totalPage);
 			request.setAttribute("page", page);
 			request.setAttribute("totalCnt", totalCnt);
-			
-			Map<String, Object> a = (Map<String, Object>) session.getAttribute("loginedMember");
 
 			request.getRequestDispatcher("/jsp/article/list.jsp").forward(request, response);
 

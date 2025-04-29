@@ -26,17 +26,14 @@ public class MemberLogoutServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 
 		HttpSession session = request.getSession();
-		
-		session.setAttribute("loginedMember", null);
-		session.setAttribute("isLogined", false);
 
-		if ((boolean) session.getAttribute("isLogined") == false || session.getAttribute("isLogined") == null) {
+		if (session.getAttribute("loginedMember") == null) {
 			response.getWriter().append(String.format("<script>alert('이미 로그아웃 되어있음');</script>"));
 			response.getWriter().append(String.format("<script>history.back();</script>"));
 			return;
 		}
-		
-		
+//session.removeAttribute("loginedMember");
+		session.setAttribute("loginedMember", null);
 		response.getWriter().append(String.format("<script>alert('로그아웃 됨');</script>"));
 		response.getWriter().append(String.format("<script>location.replace('../home/main');</script>"));
 
