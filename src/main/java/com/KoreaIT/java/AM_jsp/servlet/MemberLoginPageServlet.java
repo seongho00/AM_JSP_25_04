@@ -17,14 +17,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@WebServlet("/home/loginPage")
-public class HomeLoginPageServlet extends HttpServlet {
+@WebServlet("/member/loginPage")
+public class MemberLoginPageServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 		
 		HttpSession session = request.getSession();
+		
+		System.out.println(session.getAttribute("isLogined"));
 		
 		if (session.getAttribute("isLogined") == null) {
 			session.setAttribute("isLogined", false);
@@ -35,7 +37,7 @@ public class HomeLoginPageServlet extends HttpServlet {
 			response.getWriter().append(String.format("<script>history.back();</script>"));
 			return;
 		}
-		request.getRequestDispatcher("/jsp/home/login.jsp").forward(request, response);
+		request.getRequestDispatcher("/jsp/member/login.jsp").forward(request, response);
 
 	}
 

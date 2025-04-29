@@ -9,15 +9,17 @@ import java.util.Map;
 
 import com.KoreaIT.java.AM_jsp.util.DBUtil;
 import com.KoreaIT.java.AM_jsp.util.SecSql;
+import com.mysql.cj.Session;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
-@WebServlet("/article/doWrite")
-public class ArticleDoWriteServlet extends HttpServlet {
+@WebServlet("/member/doLogin")
+public class MemberDoLoginServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -38,23 +40,46 @@ public class ArticleDoWriteServlet extends HttpServlet {
 		try {
 			conn = DriverManager.getConnection(url, "root", "");
 			response.getWriter().append("연결 성공!");
+			HttpSession session = request.getSession();
 
-			SecSql sql = new SecSql();
-
-			String title = request.getParameter("title");
-			String body = request.getParameter("body");
-			String memberId = request.getParameter("memberId");
-
-			sql.append("INSERT INTO article");
-			sql.append("SET regDate = NOW(),");
-			sql.append("title = ?,", title);
-			sql.append("`body` = ?,", body);
-			sql.append("memberId = ?;", memberId);
+			String loginId = request.getParameter("loginId");
+			String loginPw = request.getParameter("loginPw");
 			
 
-			DBUtil.insert(conn, sql);
+			
+			if (loginId.isEmpty()) {
+				response.getWriter().append(String.format("<script>alert('아이디 입력 필요.');</script>"));
+				response.getWriter().append(String.format("<script>history.back();</script>"));
+				return;
+			}
+			
+			
+			
 
-			response.getWriter().append(String.format("<script>location.replace('list');</script>"));
+			SecSql sql = new SecSql();
+			sql.append("SELECT *");
+			sql.append("FROM member");
+			sql.append("WHERE regId = ?;", loginId);
+
+			Map<String, Object> member = DBUtil.selectRow(conn, sql);
+
+			if (member.isEmpty()) {
+				response.getWriter().append(String.format("<script>alert('회원가입된 아이디 없음.');</script>"));
+				response.getWriter().append(String.format("<script>history.back();</script>"));
+				return;
+			}
+
+			if (!member.get("regPw").equals(loginPw)) {
+				response.getWriter().append(String.format("<script>alert('비밀번호 틀림');</script>"));
+				response.getWriter().append(String.format("<script>history.back();</script>"));
+				return;
+			}
+			
+	
+			session.setAttribute("loginedMember", member);
+			session.setAttribute("isLogined", true);
+			response.getWriter().append(String.format("<script>alert('로그인 성공!');</script>"));
+			response.getWriter().append(String.format("<script>location.replace('../home/main');</script>"));
 
 		} catch (SQLException e) {
 			System.out.println("에러 1 : " + e);

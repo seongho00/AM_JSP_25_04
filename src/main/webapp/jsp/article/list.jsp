@@ -27,6 +27,9 @@ int totalCnt = (int) request.getAttribute("totalCnt");
 		<%=totalCnt%>
 	</div>
 	<a href="writePage" >글쓰기</a>
+	<a href="myList" >내 글 보기</a>
+	
+
 
 	<ul>
 		<%
@@ -36,7 +39,8 @@ int totalCnt = (int) request.getAttribute("totalCnt");
 				<%=articleRows.get(i).get("id")%>번,
 				<%=articleRows.get(i).get("regDate")%>,
 				<%=articleRows.get(i).get("title")%>,
-				<%=articleRows.get(i).get("body")%>
+				<%=articleRows.get(i).get("body")%>,
+				<%=articleRows.get(i).get("name")%>
 			</a></li>
 
 		<%

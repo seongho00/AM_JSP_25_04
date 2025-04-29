@@ -16,13 +16,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/home/registerPage")
-public class HomeRegisterPageServlet extends HttpServlet {
+@WebServlet("/member/registerPage")
+public class MemberRegisterPageServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		request.getRequestDispatcher("/jsp/home/register.jsp").forward(request, response);
+		request.getRequestDispatcher("/jsp/member/register.jsp").forward(request, response);
 
 	}
 

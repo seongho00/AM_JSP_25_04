@@ -8,6 +8,7 @@
 
 <%
 Map<String, Object> articleRow = (Map<String, Object>) request.getAttribute("articleRow");
+Map<String, Object> loginedMember = (Map<String, Object>) session.getAttribute("loginedMember");
 %>
 <!DOCTYPE html>
 <html>
@@ -37,13 +38,29 @@ Map<String, Object> articleRow = (Map<String, Object>) request.getAttribute("art
 		</li>
 		<li>내용 : <%=articleRow.get("body")%>
 		</li>
+		<li>작성자 : <%=articleRow.get("name")%>
+		</li>
 	</ul>
 
-	<a href="modify/page?id=<%=articleRow.get("id")%>">수정하기</a>
+
+	<style type="text/css">
+.modify, .delete {
+	visibility: hidden;
+}
+</style>
+
+
+	<a class="<%=loginedMember != null ? 
+	(articleRow.get("memberId") == loginedMember.get("id") ? "" : "modify") : "modify"
+	%>"
+		href="modify/page?id=<%=articleRow.get("id")%>">수정하기</a>
 
 
 
-	<a onClick="if(confirm('정말로 삭제하시겠습니까?') == false){return false;}"
+	<a class="<%=loginedMember != null ? 
+	(articleRow.get("memberId") == loginedMember.get("id") ? "" : "delete") : "delete"
+	%>"
+		onClick="if(confirm('정말로 삭제하시겠습니까?') == false){return false;}"
 		href="delete?id=<%=articleRow.get("id")%>">삭제하기</a>
 	<div>
 		<a href="list">리스트로 돌아가기</a>

@@ -16,8 +16,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/home/doRegister")
-public class HomeDoRegisterServlet extends HttpServlet {
+@WebServlet("/member/doRegister")
+public class MemberDoRegisterServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -92,7 +92,7 @@ public class HomeDoRegisterServlet extends HttpServlet {
 			DBUtil.insert(conn, sql);
 
 			response.getWriter().append(String.format("<script>alert('회원가입 성공!');</script>"));
-			response.getWriter().append(String.format("<script>location.replace('main');</script>"));
+			response.getWriter().append(String.format("<script>location.replace('../home/main');</script>"));
 
 		} catch (SQLException e) {
 			System.out.println("에러 1 : " + e);

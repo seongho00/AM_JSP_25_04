@@ -10,7 +10,7 @@ session.setAttribute("isLogined", true);
 <title>회원가입 페이지</title>
 </head>
 <body>
-	<a href="main">메인으로 가기</a>
+	<a href="../home/main">메인으로 가기</a>
 	<h1>로그인 페이지</h1>
 
 	<form action="doLogin" method="get">
