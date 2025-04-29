@@ -25,7 +25,7 @@
 	</script>
 
 	<form onsubmit="RegisterForm__submit(this); return false;"
-		action="doRegister" method="POST">
+		action="doRegister" method="get">
 		<div>
 			<label>아이디 : <input autocomplete="off" type="text"
 				name="regId" /></label>

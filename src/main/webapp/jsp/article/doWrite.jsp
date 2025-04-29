@@ -16,7 +16,7 @@ Map<String, Object> loginedMember = (Map<String, Object>) session.getAttribute("
 </head>
 <body>
 
-	<form action="doWrite" method="POST">
+	<form action="doWrite" method="get">
 		<div>제목</div>
 		<input type="text" name="title" />
 		<div>내용</div>

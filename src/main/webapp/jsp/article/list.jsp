@@ -78,7 +78,7 @@ int totalCnt = (int) request.getAttribute("totalCnt");
 		<%
 		for (int i = 1; i <= totalPage; i++) {
 		%>
-		<a class="<%=cPage == i ? "cPage" : ""%>" href="list?page=<%=i%>">
+		<a class="<%=cPage == i ? "cPage" : ""%>" href="s/list?page=<%=i%>">
 			<%=i%>
 		</a>
 		<%
