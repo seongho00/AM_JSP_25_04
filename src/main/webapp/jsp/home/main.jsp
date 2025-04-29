@@ -17,6 +17,7 @@
 		if (session.getAttribute("loginedMember") == null) {
 		%>
 		<li><a href="../member/loginPage">로그인</a></li>
+		
 		<%
 		}
 		%>

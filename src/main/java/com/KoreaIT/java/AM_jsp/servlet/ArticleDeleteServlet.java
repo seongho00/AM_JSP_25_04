@@ -15,6 +15,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/article/delete")
 public class ArticleDeleteServlet extends HttpServlet {
@@ -23,6 +24,14 @@ public class ArticleDeleteServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
+
+		HttpSession session = request.getSession();
+		Map<String, Object> loginedMember = (Map<String, Object>) session.getAttribute("loginedMember");
+		if (loginedMember == null) {
+			response.getWriter().append(String.format("<script>alert('로그인 필요.');</script>"));
+			response.getWriter().append(String.format("<script>location.replace('../member/loginPage');</script>"));
+			return;
+		}
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -39,22 +48,28 @@ public class ArticleDeleteServlet extends HttpServlet {
 		try {
 			conn = DriverManager.getConnection(url, "root", "");
 			response.getWriter().append("연결 성공!");
-
+			int id = Integer.parseInt(request.getParameter("id"));
 
 			SecSql sql = new SecSql();
-			
+			sql.append("SELECT *");
+			sql.append("FROM article");
+			sql.append("WHERE memberId = ?", loginedMember.get("id"));
 
-			
-			int id = Integer.parseInt(request.getParameter("id")); 
-			
-			sql.append("DELETE FROM article WHERE id =?;",id);
+			Map<String, Object> articleRow = DBUtil.selectRow(conn, sql);
+
+			if ((int) articleRow.get("memberId") == (int) loginedMember.get("id")) {
+				response.getWriter().append(
+						String.format("<script>alert('%d번 글에 대한 권한 x'); location.replace('list');</script>", id));
+				return;
+			}
+
+			sql = new SecSql();
+
+			sql.append("DELETE FROM article WHERE id =?;", id);
 
 			DBUtil.delete(conn, sql);
-			
-			
-			response.getWriter().append(String.format("<script>location.replace('list');</script>"));
-// location replace / history back
 
+			response.getWriter().append(String.format("<script>location.replace('list');</script>"));
 
 		} catch (SQLException e) {
 			System.out.println("에러 1 : " + e);

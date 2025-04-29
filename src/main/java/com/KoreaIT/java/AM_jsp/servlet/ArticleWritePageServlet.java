@@ -28,10 +28,9 @@ public class ArticleWritePageServlet extends HttpServlet {
 		Map<String, Object> loginedMember = (Map<String, Object>) session.getAttribute("loginedMember");
 		if (loginedMember == null) {
 			response.getWriter().append(String.format("<script>alert('로그인 필요.');</script>"));
-			response.getWriter().append(String.format("<script>location.replace('list');</script>"));
+			response.getWriter().append(String.format("<script>location.replace('../member/loginPage');</script>"));
 			return;
 		}
-		request.setAttribute("loginedMember", loginedMember);
 		
 		request.getRequestDispatcher("/jsp/article/doWrite.jsp").forward(request, response);
 

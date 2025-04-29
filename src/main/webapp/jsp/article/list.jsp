@@ -26,27 +26,38 @@ int totalCnt = (int) request.getAttribute("totalCnt");
 		총 게시글 개수 :
 		<%=totalCnt%>
 	</div>
-	<a href="writePage" >글쓰기</a>
-	<a href="myList" >내 글 보기</a>
-	
+	<a href="writePage">글쓰기</a>
+	<a href="myList">내 글 보기</a>
 
 
-	<ul>
-		<%
-		for (int i = 0; i < articleRows.size(); i++) {
-		%>
-		<li><a href="detail?id=<%=articleRows.get(i).get("id")%>">
-				<%=articleRows.get(i).get("id")%>번,
-				<%=articleRows.get(i).get("regDate")%>,
-				<%=articleRows.get(i).get("title")%>,
-				<%=articleRows.get(i).get("body")%>,
-				<%=articleRows.get(i).get("name")%>
-			</a></li>
 
-		<%
-		}
-		%>
-	</ul>
+	<table style="border-collapse: collapse; border-color: green;"
+		border="1px">
+		<thead>
+			<tr>
+				<th>번호</th>
+				<th>날짜</th>
+				<th>작성자</th>
+				<th>제목</th>
+				<th>내용</th>
+			</tr>
+		</thead>
+		<tbody>
+			<%
+			for (Map<String, Object> articleRow : articleRows) {
+			%>
+			<tr style="text-align: center;">
+				<td><%=articleRow.get("id")%>번</td>
+				<td><%=articleRow.get("regDate")%></td>
+				<td><%=articleRow.get("name")%></td>
+				<td><a href="detail?id=<%=articleRow.get("id")%>"><%=articleRow.get("title")%></a></td>
+				<td><%=articleRow.get("body")%></td>
+			</tr>
+			<%
+			}
+			%>
+		</tbody>
+	</table>
 
 	<style type="text/css">
 .page>a {

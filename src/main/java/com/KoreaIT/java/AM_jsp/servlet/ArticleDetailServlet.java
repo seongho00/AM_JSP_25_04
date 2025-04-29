@@ -45,7 +45,7 @@ public class ArticleDetailServlet extends HttpServlet {
 			
 			SecSql sql = new SecSql();
 			
-			sql.append("SELECT A.*, M.name AS `name`");
+			sql.append("SELECT A.*, M.name");
 			sql.append("FROM article AS A");
 			sql.append("INNER JOIN `member` AS M");
 			sql.append("ON A.memberId = M.id");

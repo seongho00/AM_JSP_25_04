@@ -41,6 +41,12 @@ public class ArticleMyListServlet extends HttpServlet {
 			response.getWriter().append("연결 성공!");
 			HttpSession session = request.getSession();
 
+			Map<String, Object> loginedMember = (Map<String, Object>) session.getAttribute("loginedMember");
+			if (loginedMember == null) {
+				response.getWriter().append(String.format("<script>alert('로그인 필요.');</script>"));
+				response.getWriter().append(String.format("<script>location.replace('../member/loginPage');</script>"));
+				return;
+			}
 			int page = 1;
 			String inputedPage = request.getParameter("page");
 
@@ -60,7 +66,6 @@ public class ArticleMyListServlet extends HttpServlet {
 
 			int totalPage = (int) Math.ceil(totalCnt / (double) viewArticleCount);
 
-			Map<String, Object> loginedMember = (Map<String, Object>) session.getAttribute("loginedMember");
 
 			sql = new SecSql();
 			sql.append("SELECT A.*, M.name AS `name`");
