@@ -75,13 +75,20 @@ public class MemberController {
 		response.getWriter().append(String.format("<script>location.replace('../home/main');</script>"));
 	}
 
-	public void register() {
-		// TODO Auto-generated method stub
+	public void logout() throws IOException {
+		response.setContentType("text/html;charset=UTF-8");
 
-	}
+		HttpSession session = request.getSession();
 
-	public void logout() {
-		// TODO Auto-generated method stub
+		if (session.getAttribute("loginedMember") == null) {
+			response.getWriter().append(String.format("<script>alert('이미 로그아웃 되어있음');</script>"));
+			response.getWriter().append(String.format("<script>history.back();</script>"));
+			return;
+		}
+//session.removeAttribute("loginedMember");
+		session.setAttribute("loginedMember", null);
+		response.getWriter().append(String.format("<script>alert('로그아웃 됨');</script>"));
+		response.getWriter().append(String.format("<script>location.replace('../home/main');</script>"));
 
 	}
 

@@ -19,13 +19,11 @@ import com.KoreaIT.java.AM_jsp.controller.MemberController;
 
 @WebServlet("/s/*")
 public class DispatcherServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		response.setContentType("text/html;charset=UTF-8");
-
+		
 		// DB 연결
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -62,7 +60,6 @@ public class DispatcherServlet extends HttpServlet {
 
 			String requestUri = request.getRequestURI();
 
-			System.out.println(requestUri);
 
 			String[] reqUriBits = requestUri.split("/");
 			// /~~~/s/article/list
@@ -92,7 +89,7 @@ public class DispatcherServlet extends HttpServlet {
 				case "modifyPage":
 					articleController.showModifyPage();
 					break;
-				case "modify":
+				case "doModify":
 					articleController.doModify();
 					break;
 				case "delete":
@@ -101,6 +98,8 @@ public class DispatcherServlet extends HttpServlet {
 				case "detail":
 					articleController.showDetail();
 					break;
+				case "myList":
+					articleController.showMyList();
 				default:
 					break;
 
@@ -115,13 +114,15 @@ public class DispatcherServlet extends HttpServlet {
 					memberController.login();
 					break;
 				case "logout":
-					memberController.login();
+					memberController.logout();
 					break;
 				case "registerPage":
 					memberController.showRegisterPage();
 					break;
 				case "doRegister":
 					memberController.doRegister();
+					break;
+				default:
 					break;
 				}
 
@@ -130,6 +131,8 @@ public class DispatcherServlet extends HttpServlet {
 				switch (actionMethodName) {
 				case "main":
 					homeController.main();
+					break;
+				default:
 					break;
 				}
 
@@ -147,6 +150,12 @@ public class DispatcherServlet extends HttpServlet {
 			}
 		}
 
+	}
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		doGet(request, response);
 	}
 
 }

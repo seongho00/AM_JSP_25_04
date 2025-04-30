@@ -53,7 +53,7 @@ Map<String, Object> loginedMember = (Map<String, Object>) session.getAttribute("
 	<a class="<%=loginedMember != null ? 
 	(articleRow.get("memberId") == loginedMember.get("id") ? "" : "modify") : "modify"
 	%>"
-		href="modify/page?id=<%=articleRow.get("id")%>">수정하기</a>
+		href="modifyPage?id=<%=articleRow.get("id")%>">수정하기</a>
 
 
 

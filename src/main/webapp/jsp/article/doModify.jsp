@@ -15,7 +15,7 @@ Map<String, Object> article = (Map<String, Object>) request.getAttribute("articl
 	<a href="../list">리스트로 돌아가기</a>
 	<h2><%=article.get("id")%>번 글 수정
 	</h2>
-	<form action="../doModify" method="POST">
+	<form action="doModify" method="POST">
 		<input type="hidden" name="id" value="<%=article.get("id")%>" />
 		<div>제목</div>
 		<input type="text" name="title" value="<%=article.get("title")%>" />
