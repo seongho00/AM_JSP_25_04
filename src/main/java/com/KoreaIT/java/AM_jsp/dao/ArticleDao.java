@@ -1,9 +1,11 @@
 package com.KoreaIT.java.AM_jsp.dao;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.KoreaIT.java.AM_jsp.dto.Article;
 import com.KoreaIT.java.AM_jsp.util.DBUtil;
 import com.KoreaIT.java.AM_jsp.util.SecSql;
 
@@ -23,7 +25,7 @@ public class ArticleDao {
 		return DBUtil.selectRowIntValue(conn, sql);
 	}
 
-	public List<Map<String, Object>> getForPrintArticles(int limitFrom, int viewArticleCount) {
+	public List<Article> getForPrintArticles(int limitFrom, int viewArticleCount) {
 		SecSql sql = new SecSql();
 		sql.append("SELECT A.*, M.name");
 		sql.append("FROM article AS A");
@@ -32,7 +34,15 @@ public class ArticleDao {
 		sql.append("ORDER BY A.id desc");
 		sql.append("LIMIT ?, ? ;", limitFrom, viewArticleCount);
 
-		return DBUtil.selectRows(conn, sql);
+		List<Map<String, Object>> articleMaps = DBUtil.selectRows(conn, sql);
+		List<Article> articles = new ArrayList<>();
+
+		for (Map<String, Object> articleMap : articleMaps) {
+			articles.add(new Article(articleMap));
+		}
+		
+
+		return articles;
 	}
 
 	public void insertArticle(String title, String body, String memberId) {
@@ -59,13 +69,17 @@ public class ArticleDao {
 
 	}
 
-	public Map<String, Object> getArticleByMemberId(int memberId) {
+	public Article getArticleByMemberId(int memberId) {
 		SecSql sql = new SecSql();
 		sql.append("SELECT *");
 		sql.append("FROM article");
 		sql.append("WHERE memberId = ?", memberId);
 
-		return DBUtil.selectRow(conn, sql);
+		Map<String, Object> articleMap = DBUtil.selectRow(conn, sql);
+
+		Article article = new Article(articleMap);
+
+		return article;
 	}
 
 	public void deleteArticle(int id) {
@@ -77,7 +91,7 @@ public class ArticleDao {
 		DBUtil.delete(conn, sql);
 	}
 
-	public Map<String, Object> getForPrintArticleById(int id) {
+	public Article getForPrintArticleById(int id) {
 		SecSql sql = new SecSql();
 
 		sql.append("SELECT A.*, M.name");
@@ -85,13 +99,23 @@ public class ArticleDao {
 		sql.append("INNER JOIN `member` AS M");
 		sql.append("ON A.memberId = M.id");
 		sql.append("WHERE A.id = ?;", id);
-		return DBUtil.selectRow(conn, sql);
+
+		Map<String, Object> articleMap = DBUtil.selectRow(conn, sql);
+
+		Article article = new Article(articleMap);
+
+		return article;
 	}
 
-	public Map<String, Object> getArticleById(int id) {
+	public Article getArticleById(int id) {
 		SecSql sql = new SecSql();
 		sql.append("SELECT * FROM article WHERE id =?;", id);
-		return DBUtil.selectRow(conn, sql);
+
+		Map<String, Object> articleMap = DBUtil.selectRow(conn, sql);
+
+		Article article = new Article(articleMap);
+
+		return article;
 	}
 
 }

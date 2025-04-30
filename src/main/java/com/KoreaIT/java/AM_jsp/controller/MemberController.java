@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.util.Map;
 
+import com.KoreaIT.java.AM_jsp.dto.Member;
+import com.KoreaIT.java.AM_jsp.service.MemberService;
 import com.KoreaIT.java.AM_jsp.util.DBUtil;
 import com.KoreaIT.java.AM_jsp.util.SecSql;
 
@@ -16,11 +18,13 @@ public class MemberController {
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	private Connection conn;
+	private MemberService memberService;
 
 	public MemberController(HttpServletRequest request, HttpServletResponse response, Connection conn) {
 		this.conn = conn;
 		this.request = request;
 		this.response = response;
+		this.memberService = new MemberService(conn);
 	}
 
 	public void showLoginPage() throws ServletException, IOException {
@@ -51,20 +55,15 @@ public class MemberController {
 			return;
 		}
 
-		SecSql sql = new SecSql();
-		sql.append("SELECT *");
-		sql.append("FROM member");
-		sql.append("WHERE regId = ?;", loginId);
+		Member member = memberService.getMemberById(loginId);
 
-		Map<String, Object> member = DBUtil.selectRow(conn, sql);
-
-		if (member.isEmpty()) {
+		if (member == null) {
 			response.getWriter().append(String.format("<script>alert('회원가입된 아이디 없음.');</script>"));
 			response.getWriter().append(String.format("<script>history.back();</script>"));
 			return;
 		}
 
-		if (!member.get("regPw").equals(loginPw)) {
+		if (!member.getLoginPw().equals(loginPw)) {
 			response.getWriter().append(String.format("<script>alert('비밀번호 틀림');</script>"));
 			response.getWriter().append(String.format("<script>history.back();</script>"));
 			return;
@@ -85,7 +84,7 @@ public class MemberController {
 			response.getWriter().append(String.format("<script>history.back();</script>"));
 			return;
 		}
-//session.removeAttribute("loginedMember");
+
 		session.setAttribute("loginedMember", null);
 		response.getWriter().append(String.format("<script>alert('로그아웃 됨');</script>"));
 		response.getWriter().append(String.format("<script>location.replace('../home/main');</script>"));
@@ -94,57 +93,44 @@ public class MemberController {
 
 	public void doRegister() throws IOException {
 		response.setContentType("text/html;charset=UTF-8");
-		String regId = request.getParameter("regId");
-		String regPw = request.getParameter("regPw");
+		String loginId = request.getParameter("loginId");
+		String loginPw = request.getParameter("loginPw");
 		String checkPw = request.getParameter("checkPw");
 		String name = request.getParameter("name");
 
-		if (regId.isEmpty()) {
+		if (loginId.isEmpty()) {
 			response.getWriter().append(String.format("<script>alert('아이디 입력 필요');</script>"));
 			response.getWriter().append(String.format("<script>history.back();</script>"));
 			return;
 		}
 
-		if (regPw.isEmpty()) {
+		if (loginPw.isEmpty()) {
 			response.getWriter().append(String.format("<script>alert('비번 입력 필요');</script>"));
 			response.getWriter().append(String.format("<script>history.back();</script>"));
 			return;
 		}
 
-		if (regPw.trim().contains(" ")) {
+		if (loginPw.trim().contains(" ")) {
 			response.getWriter().append(String.format("<script>alert('비번 형식 안 맞음');</script>"));
 			response.getWriter().append(String.format("<script>history.back();</script>"));
 			return;
 		}
 
-		if (!regPw.equals(checkPw)) {
+		if (!loginPw.equals(checkPw)) {
 			response.getWriter().append(String.format("<script>alert('비번 확인 안 맞음');</script>"));
 			response.getWriter().append(String.format("<script>history.back();</script>"));
 			return;
 		}
 
-		SecSql sql = new SecSql();
-		sql.append("SELECT *");
-		sql.append("FROM member");
-		sql.append("WHERE regId = ?;", regId);
+		Member member = memberService.getMemberById(loginId);
 
-		Map<String, Object> member = DBUtil.selectRow(conn, sql);
-
-		if (!member.isEmpty()) {
+		if (member != null) {
 			response.getWriter().append(String.format("<script>alert('중복 아이디');</script>"));
 			response.getWriter().append(String.format("<script>history.back();</script>"));
 			return;
 		}
 
-		sql = new SecSql();
-
-		sql.append("INSERT INTO `member`");
-		sql.append("SET regDate = NOW(),");
-		sql.append("regId = ?,", regId);
-		sql.append("regPw = ?,", regPw);
-		sql.append("`name` = ?;", name);
-
-		DBUtil.insert(conn, sql);
+		memberService.insertMember(loginId, loginPw, name);
 
 		response.getWriter().append(String.format("<script>alert('회원가입 성공!');</script>"));
 		response.getWriter().append(String.format("<script>location.replace('../home/main');</script>"));

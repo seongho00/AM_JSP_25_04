@@ -1,15 +1,19 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.List"%>
+<%@page import="com.KoreaIT.java.AM_jsp.dto.Article"%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
 <%
-List<Map<String, Object>> articleRows = (List<Map<String, Object>>) request.getAttribute("articleRows");
+List<Article> articles = (List<Article>) request.getAttribute("articles");
 int totalPage = (int) request.getAttribute("totalPage");
 int cPage = (int) request.getAttribute("page");
 int totalCnt = (int) request.getAttribute("totalCnt");
+int viewPageLimitFrom = (int) request.getAttribute("viewPageLimitFrom");
+int viewPageLimitTo = (int) request.getAttribute("viewPageLimitTo");
+int viewPage = (int) request.getAttribute("viewPage");
 %>
 <!DOCTYPE html>
 <html>
@@ -44,14 +48,14 @@ int totalCnt = (int) request.getAttribute("totalCnt");
 		</thead>
 		<tbody>
 			<%
-			for (Map<String, Object> articleRow : articleRows) {
+			for (Article article : articles) {
 			%>
 			<tr style="text-align: center;">
-				<td><%=articleRow.get("id")%>번</td>
-				<td><%=articleRow.get("regDate")%></td>
-				<td><%=articleRow.get("name")%></td>
-				<td><a href="detail?id=<%=articleRow.get("id")%>"><%=articleRow.get("title")%></a></td>
-				<td><%=articleRow.get("body")%></td>
+				<td><%=article.getId()%>번</td>
+				<td><%=article.getRegDate()%></td>
+				<td><%=article.getName()%></td>
+				<td><a href="detail?id=<%=article.getId()%>"><%=article.getTitle()%></a></td>
+				<td><%=article.getBody()%></td>
 			</tr>
 			<%
 			}
@@ -75,15 +79,18 @@ int totalCnt = (int) request.getAttribute("totalCnt");
 </style>
 
 	<div class="page">
+		<a href="list?viewPage=<%=viewPage - 1%>&page=<%=cPage%>"> < </a>
 		<%
-		for (int i = 1; i <= totalPage; i++) {
+		for (int i = viewPageLimitFrom; i <= viewPageLimitTo; i++) {
 		%>
-		<a class="<%=cPage == i ? "cPage" : ""%>" href="s/list?page=<%=i%>">
+		<a class="<%=cPage == i ? "cPage" : ""%>" href="list?page=<%=i%>&viewPage=<%=viewPage%>">
 			<%=i%>
 		</a>
 		<%
 		}
 		%>
+		<a href="list?viewPage=<%=viewPage + 1%>&page=<%=cPage%>"> > </a>
 	</div>
+
 </body>
 </html>

@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 
+import com.KoreaIT.java.AM_jsp.dto.Article;
+import com.KoreaIT.java.AM_jsp.dto.Member;
 import com.KoreaIT.java.AM_jsp.service.ArticleService;
 import com.KoreaIT.java.AM_jsp.util.DBUtil;
 import com.KoreaIT.java.AM_jsp.util.SecSql;
@@ -44,12 +46,36 @@ public class ArticleController {
 
 		int totalPage = (int) Math.ceil(totalCnt / (double) viewArticleCount);
 
-		List<Map<String, Object>> articleRows = articleService.getForPrintArticles(limitFrom, viewArticleCount);
+		List<Article> articles = articleService.getForPrintArticles(limitFrom, viewArticleCount);
 
-		request.setAttribute("articleRows", articleRows);
+		int viewPage = 1;
+		int viewPageCount = 10;
+		String inputedviewPage = request.getParameter("viewPage");
+		int viewTotalPage = (int) Math.ceil(totalPage / (double) viewPageCount);
+
+		if (inputedviewPage != null) {
+			viewPage = Integer.parseInt(inputedviewPage);
+		}
+		if (viewPage <= 0) {
+			viewPage = 1;
+		}
+		if (viewPage > viewTotalPage) {
+			viewPage = viewTotalPage;
+		}
+
+		int viewPageLimitFrom = (viewPage - 1) * viewPageCount + 1;
+		int viewPageLimitTo = viewPage * viewPageCount;
+		if (viewPageLimitTo > totalPage) {
+			viewPageLimitTo = totalPage;
+		}
+
+		request.setAttribute("articles", articles);
 		request.setAttribute("totalPage", totalPage);
 		request.setAttribute("page", page);
 		request.setAttribute("totalCnt", totalCnt);
+		request.setAttribute("viewPageLimitFrom", viewPageLimitFrom);
+		request.setAttribute("viewPageLimitTo", viewPageLimitTo);
+		request.setAttribute("viewPage", viewPage);
 
 		request.getRequestDispatcher("/jsp/article/list.jsp").forward(request, response);
 	}
@@ -58,7 +84,8 @@ public class ArticleController {
 		response.setContentType("text/html;charset=UTF-8");
 
 		HttpSession session = request.getSession();
-		Map<String, Object> loginedMember = (Map<String, Object>) session.getAttribute("loginedMember");
+		Member loginedMember = (Member) session.getAttribute("loginedMember");
+
 		if (loginedMember == null) {
 			response.getWriter().append(String.format("<script>alert('로그인 필요.');</script>"));
 			response.getWriter().append(String.format("<script>location.replace('../member/loginPage');</script>"));
@@ -95,7 +122,7 @@ public class ArticleController {
 
 		HttpSession session = request.getSession();
 
-		Map<String, Object> loginedMember = (Map<String, Object>) session.getAttribute("loginedMember");
+		Member loginedMember = (Member) session.getAttribute("loginedMember");
 
 		if (loginedMember == null) {
 			response.getWriter().append(String.format("<script>alert('로그인 필요.');</script>"));
@@ -103,11 +130,11 @@ public class ArticleController {
 			return;
 		}
 
-		Map<String, Object> articleRow = articleService.getArticleByMemberId((int) loginedMember.get("id"));
+		Article article = articleService.getArticleByMemberId((int) loginedMember.getId());
 
 		int id = Integer.parseInt(request.getParameter("id"));
 
-		if ((int) articleRow.get("memberId") != (int) loginedMember.get("id")) {
+		if ((int) article.getMemberId() != (int) loginedMember.getId()) {
 			response.getWriter()
 					.append(String.format("<script>alert('%d번 글에 대한 권한 x'); location.replace('list');</script>", id));
 			return;
@@ -122,11 +149,11 @@ public class ArticleController {
 	public void showDetail() throws IOException, ServletException {
 		int id = Integer.parseInt(request.getParameter("id"));
 
-		Map<String, Object> articleRow = articleService.getForPrintArticleById(id);
+		Article article = articleService.getForPrintArticleById(id);
 
-		request.setAttribute("articleRow", articleRow);
+		request.setAttribute("article", article);
 
-		if (articleRow == null) {
+		if (article == null) {
 			response.getWriter().append(String.format("<script>location.replace('list');</script>"));
 			response.getWriter().append(String.format("<script>alert('Hello');</script>"));
 		}
@@ -138,10 +165,10 @@ public class ArticleController {
 	public void showModifyPage() throws ServletException, IOException {
 
 		int id = Integer.parseInt(request.getParameter("id"));
-		
-		Map<String, Object> articleRow = articleService.getArticleById(id);
 
-		request.setAttribute("articleRow", articleRow);
+		Article article = articleService.getArticleById(id);
+
+		request.setAttribute("article", article);
 		request.setAttribute("id", id);
 
 		request.getRequestDispatcher("/jsp/article/doModify.jsp").forward(request, response);
@@ -149,10 +176,10 @@ public class ArticleController {
 	}
 
 	public void showMyList() throws ServletException, IOException {
-		response.setContentType("text/html;charset=UTF-8");
+
 		HttpSession session = request.getSession();
 
-		Map<String, Object> loginedMember = (Map<String, Object>) session.getAttribute("loginedMember");
+		Member loginedMember = (Member) session.getAttribute("loginedMember");
 		if (loginedMember == null) {
 			response.getWriter().append(String.format("<script>alert('로그인 필요.');</script>"));
 			response.getWriter().append(String.format("<script>location.replace('../member/loginPage');</script>"));
@@ -168,21 +195,16 @@ public class ArticleController {
 
 		int limitFrom = (page - 1) * viewArticleCount;
 
-		SecSql sql = new SecSql();
-
-		sql.append("SELECT COUNT(*)");
-		sql.append("FROM article;");
-
-		int totalCnt = DBUtil.selectRowIntValue(conn, sql);
+		int totalCnt = articleService.getTotalArticleCount();
 
 		int totalPage = (int) Math.ceil(totalCnt / (double) viewArticleCount);
 
-		sql = new SecSql();
+		SecSql sql = new SecSql();
 		sql.append("SELECT A.*, M.name AS `name`");
 		sql.append("FROM article AS A");
 		sql.append("INNER JOIN `member` AS M");
 		sql.append("ON A.memberId = M.id");
-		sql.append("WHERE A.memberId = ?", loginedMember.get("id"));
+		sql.append("WHERE A.memberId = ?", loginedMember.getId());
 		sql.append("ORDER BY A.id desc");
 		sql.append("LIMIT ?, ? ;", limitFrom, viewArticleCount);
 

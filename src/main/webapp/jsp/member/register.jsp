@@ -14,9 +14,9 @@
 	<script type="text/javascript">
 		function RegisterForm__submit(form) {
 			console.log('test');
-			if (form.regId.value.length == 0) {
+			if (form.loginId.value.length == 0) {
 				alert('아이디 필요');
-				form.regId.focus();
+				form.loginId.focus();
 				return;
 			}
 		
@@ -28,11 +28,11 @@
 		action="doRegister" method="get">
 		<div>
 			<label>아이디 : <input autocomplete="off" type="text"
-				name="regId" /></label>
+				name="loginId" /></label>
 		</div>
 
 		<div>
-			<label>비밀번호 : <input type="password" name="regPw" /></label>
+			<label>비밀번호 : <input type="password" name="loginPw" /></label>
 		</div>
 		<div>
 			<label>비밀번호 확인 : <input type="password" name="checkPw" /></label>

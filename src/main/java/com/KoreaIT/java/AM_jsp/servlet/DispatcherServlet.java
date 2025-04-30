@@ -16,6 +16,7 @@ import java.util.Map;
 import com.KoreaIT.java.AM_jsp.controller.ArticleController;
 import com.KoreaIT.java.AM_jsp.controller.HomeController;
 import com.KoreaIT.java.AM_jsp.controller.MemberController;
+import com.KoreaIT.java.AM_jsp.dto.Member;
 
 @WebServlet("/s/*")
 public class DispatcherServlet extends HttpServlet {
@@ -23,7 +24,7 @@ public class DispatcherServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		response.setContentType("text/html;charset=UTF-8");
-		
+
 		// DB 연결
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -46,12 +47,12 @@ public class DispatcherServlet extends HttpServlet {
 
 			boolean isLogined = false;
 			int loginedMemberId = -1;
-			Map<String, Object> loginedMember = null;
+			Member loginedMember = null;
 
 			if (session.getAttribute("loginedMemberId") != null) {
 				isLogined = true;
 				loginedMemberId = (int) session.getAttribute("loginedMemberId");
-				loginedMember = (Map<String, Object>) session.getAttribute("loginedMember");
+				loginedMember = (Member) session.getAttribute("loginedMember");
 			}
 
 			request.setAttribute("isLogined", isLogined);
@@ -59,7 +60,6 @@ public class DispatcherServlet extends HttpServlet {
 			request.setAttribute("loginedMember", loginedMember);
 
 			String requestUri = request.getRequestURI();
-
 
 			String[] reqUriBits = requestUri.split("/");
 			// /~~~/s/article/list
@@ -151,7 +151,7 @@ public class DispatcherServlet extends HttpServlet {
 		}
 
 	}
-	
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 

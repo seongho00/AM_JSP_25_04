@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.KoreaIT.java.AM_jsp.dao.ArticleDao;
+import com.KoreaIT.java.AM_jsp.dto.Article;
 
 public class ArticleService {
 
@@ -20,7 +21,7 @@ public class ArticleService {
 		return articleDao.getTotalArticleCount();
 	}
 
-	public List<Map<String, Object>> getForPrintArticles(int limitFrom, int viewArticleCount) {
+	public List<Article> getForPrintArticles(int limitFrom, int viewArticleCount) {
 		return articleDao.getForPrintArticles(limitFrom, viewArticleCount);
 	}
 
@@ -32,7 +33,7 @@ public class ArticleService {
 		articleDao.updateArticle(title, body, id);
 	}
 
-	public Map<String, Object> getArticleByMemberId(int memberId) {
+	public Article getArticleByMemberId(int memberId) {
 		return articleDao.getArticleByMemberId(memberId);
 	}
 
@@ -41,12 +42,17 @@ public class ArticleService {
 
 	}
 
-	public Map<String, Object> getForPrintArticleById(int id) {
+	public Article getForPrintArticleById(int id) {
 		return articleDao.getForPrintArticleById(id);
 	}
 
-	public Map<String, Object> getArticleById(int id) {
+	public Article getArticleById(int id) {
 		return articleDao.getArticleById(id);
+		
+	}
+
+	public void getForPrintArticlesById(int limitFrom, int viewArticleCount) {
+		
 		
 	}
 
